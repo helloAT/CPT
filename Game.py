@@ -20,8 +20,6 @@ isJump = False
 jumpCount = 10
 
 isPunch = False
-punchCount = 10
-maxarmLength = (punchCount ** 2)
 '''
 #Music
 pygame.mixer.music.load("Music.mp3")
@@ -29,6 +27,25 @@ pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 '''
 run = True
+
+def punch(isPunch):
+    punchCount = 10
+    maxarmLength = (punchCount ** 2)
+    
+    if not isPunch:
+        if keys[pygame.K_UP]:
+            isPunch = True
+    else:
+        if punchCount >= -10:
+            neg = 1
+            if jumpCount < 0:
+                neg = -1
+            armLength = maxarmLength - (punchCount ** 2) * neg
+            punchCount -= 1
+            pygame.draw.rect(win,(255,0,0),(player_x + width, player_y + 100, armLength, 50))
+        else:
+            isPunch = False
+            punchCount = 10
 
 while run:
 
@@ -49,22 +66,9 @@ while run:
         player_x += 5
     if keys[pygame.K_LEFT]:
         player_x -= 5 
-
-    if not isPunch:
-        if keys[pygame.K_UP]:
-            isPunch = True
-    else:
-        if punchCount >= -10:
-            neg = 1
-            if jumpCount < 0:
-                neg = -1
-            armLength = maxarmLength - (punchCount ** 2) * neg
-            punchCount -= 1
-            pygame.draw.rect(win,(255,0,0),(player_x + width, player_y + 100, armLength, 50))
-        else:
-            isPunch = False
-            punchCount = 10
-
+    
+    punch(isPunch)
+     
     if not isJump:
         if keys[pygame.K_SPACE]:
             isJump = True
